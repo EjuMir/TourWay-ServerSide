@@ -8,7 +8,7 @@ app.use(express.json());
 app.use(cors());
 
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.cckizs6.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -29,20 +29,32 @@ async function run() {
     const tourSpots = client.db("TourDB").collection("TourSpots");;
 
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
-    
-    app.post('/allTouristSpot', async(req, res)=>{
-        const tourCard = req.body;
-        // console.log(tourCard);
-        const result = await tourSpots.insertOne(tourCard);
-        res.send(result);
+
+    app.post('/allTouristSpot', async (req, res) => {
+      const tourCard = req.body;
+      // console.log(tourCard);
+      const result = await tourSpots.insertOne(tourCard);
+      res.send(result);
     })
 
-    app.get('/allTouristSpot', async(req, res)=>{
-        const findAll = tourSpots.find();
-        const result = await findAll.toArray();
-        res.send(result);
+    app.get('/allTouristSpot', async (req, res) => {
+      const findAll = tourSpots.find();
+      const result = await findAll.toArray();
+      res.send(result);
     })
-   
+
+    app.get('/viewDetails', async (req, res) => {
+      const findAll = tourSpots.find();
+      const result = await findAll.toArray();
+      res.send(result);
+    })
+    app.get('/viewDetails/:id', async(req, res)=>{
+      const id = req.params.id;
+      const findId = {_id : new ObjectId(id)};
+      const find = await tourSpots.findOne(findId);
+      res.send(find);
+    })
+
 
 
   } finally {
@@ -53,10 +65,10 @@ async function run() {
 run().catch(console.dir);
 
 
-app.get('/', (req,res)=>{
-    res.send('server is running')
+app.get('/', (req, res) => {
+  res.send('server is running')
 })
 
-app.listen(port, ()=>{
-    console.log(`server running on port ${port}`);
+app.listen(port, () => {
+  console.log(`server running on port ${port}`);
 })
