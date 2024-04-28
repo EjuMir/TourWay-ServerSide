@@ -48,17 +48,41 @@ async function run() {
       const result = await findAll.toArray();
       res.send(result);
     })
+
     app.get('/viewDetails/:id', async(req, res)=>{
       const id = req.params.id;
       const findId = {_id : new ObjectId(id)};
       const find = await tourSpots.findOne(findId);
       res.send(find);
     })
+
     app.delete('/allTouristSpot/:id', async(req, res)=>{
       const id = req.params.id;
       const findId = {_id : new ObjectId(id)};
       const find = await tourSpots.deleteOne(findId);
       res.send(find);
+
+    })
+
+    app.put('/allTouristSpot/:id', async(req, res)=>{
+      const id = req.params.id;
+      const findId = {_id : new ObjectId(id)};
+      const options = {upsert :true};
+      updateInfo = req.body;
+      const updateCard = {
+        $set : {
+          image: updateInfo.image, 
+          tourSpot: updateInfo.tourSpot, 
+          country: updateInfo.country, 
+          location: updateInfo.location, 
+          description: updateInfo.description, 
+          cost: updateInfo.cost, 
+          seasonality: updateInfo.seasonality, 
+          travelTime: updateInfo.travelTime, 
+          visitor: updateInfo.visitor,
+        }
+      }
+      const find = await tourSpots.updateOne(findId, updateCard, options);
 
     })
 
