@@ -83,7 +83,7 @@ async function run() {
         }
       }
       const find = await tourSpots.updateOne(findId, updateCard, options);
-
+      res.send(find)
     })
 
 
