@@ -27,10 +27,10 @@ async function run() {
     // Send a ping to confirm a successful connection
     // await client.db("admin").command({ ping: 1 });
     const tourSpots = client.db("TourDB").collection("TourSpots");
-    const countryDb = client.db("CountryDB").collection("Country")
+    const countryDb = client.db("TourDB").collection("Country")
 
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
-   
+
     //<--Tour Spots DB section-->
 
     app.post('/allTouristSpot', async (req, res) => {
@@ -52,42 +52,42 @@ async function run() {
       res.send(result);
     })
 
-    app.get('/viewDetails/:id', async(req, res)=>{
+    app.get('/viewDetails/:id', async (req, res) => {
       const id = req.params.id;
-      const findId = {_id : new ObjectId(id)};
+      const findId = { _id: new ObjectId(id) };
       const find = await tourSpots.findOne(findId);
       res.send(find);
     })
-    app.get('/updateCard/:id', async(req, res)=>{
+    app.get('/updateCard/:id', async (req, res) => {
       const id = req.params.id;
-      const findId = {_id : new ObjectId(id)};
+      const findId = { _id: new ObjectId(id) };
       const find = await tourSpots.findOne(findId);
       res.send(find);
     })
 
-    app.delete('/allTouristSpot/:id', async(req, res)=>{
+    app.delete('/allTouristSpot/:id', async (req, res) => {
       const id = req.params.id;
-      const findId = {_id : new ObjectId(id)};
+      const findId = { _id: new ObjectId(id) };
       const find = await tourSpots.deleteOne(findId);
       res.send(find);
 
     })
 
-    app.put('/allTouristSpot/:id', async(req, res)=>{
+    app.put('/allTouristSpot/:id', async (req, res) => {
       const id = req.params.id;
-      const findId = {_id : new ObjectId(id)};
-      const options = {upsert :true};
+      const findId = { _id: new ObjectId(id) };
+      const options = { upsert: true };
       updateInfo = req.body;
       const updateCard = {
-        $set : {
-          image: updateInfo.image, 
-          tourSpot: updateInfo.tourSpot, 
-          country: updateInfo.country, 
-          location: updateInfo.location, 
-          description: updateInfo.description, 
-          cost: updateInfo.cost, 
-          seasonality: updateInfo.seasonality, 
-          travelTime: updateInfo.travelTime, 
+        $set: {
+          image: updateInfo.image,
+          tourSpot: updateInfo.tourSpot,
+          country: updateInfo.country,
+          location: updateInfo.location,
+          description: updateInfo.description,
+          cost: updateInfo.cost,
+          seasonality: updateInfo.seasonality,
+          travelTime: updateInfo.travelTime,
           visitor: updateInfo.visitor,
         }
       }
@@ -96,12 +96,20 @@ async function run() {
     })
 
     //<--Country DB section-->
-
-    app.get('/country', async(req, res) =>{
+    
+    app.get('/country', async (req, res) => {
       const countryName = countryDb.find();
       const result = await countryName.toArray();
       res.send(result);
     })
+
+    app.post('/country', async (req, res) => {
+      const countryName = req.body;
+      const result = await countryDb.insertOne(countryName);
+      res.send(result)
+
+    })
+
 
 
   } finally {
