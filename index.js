@@ -26,9 +26,12 @@ async function run() {
     // await client.connect();
     // Send a ping to confirm a successful connection
     // await client.db("admin").command({ ping: 1 });
-    const tourSpots = client.db("TourDB").collection("TourSpots");;
+    const tourSpots = client.db("TourDB").collection("TourSpots");
+    const countryDb = client.db("CountryDB").collection("Country")
 
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
+   
+    //<--Tour Spots DB section-->
 
     app.post('/allTouristSpot', async (req, res) => {
       const tourCard = req.body;
@@ -50,6 +53,12 @@ async function run() {
     })
 
     app.get('/viewDetails/:id', async(req, res)=>{
+      const id = req.params.id;
+      const findId = {_id : new ObjectId(id)};
+      const find = await tourSpots.findOne(findId);
+      res.send(find);
+    })
+    app.get('/updateCard/:id', async(req, res)=>{
       const id = req.params.id;
       const findId = {_id : new ObjectId(id)};
       const find = await tourSpots.findOne(findId);
@@ -86,6 +95,13 @@ async function run() {
       res.send(find)
     })
 
+    //<--Country DB section-->
+
+    app.get('/country', async(req, res) =>{
+      const countryName = countryDb.find();
+      const result = await countryName.toArray();
+      res.send(result);
+    })
 
 
   } finally {
