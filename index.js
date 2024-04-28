@@ -54,6 +54,13 @@ async function run() {
       const find = await tourSpots.findOne(findId);
       res.send(find);
     })
+    app.delete('/allTouristSpot/:id', async(req, res)=>{
+      const id = req.params.id;
+      const findId = {_id : new ObjectId(id)};
+      const find = await tourSpots.deleteOne(findId);
+      res.send(find);
+
+    })
 
 
 
