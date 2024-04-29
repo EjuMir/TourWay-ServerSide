@@ -110,6 +110,14 @@ async function run() {
 
     })
 
+    app.get('/allTouristSpot/:id', async(req, res)=>{
+      const id = req.params.id;
+      const findCountry = {country : id};
+      const result = tourSpots.find(findCountry);
+      const array  = await result.toArray()
+      res.send(array);
+    })
+
 
 
   } finally {
