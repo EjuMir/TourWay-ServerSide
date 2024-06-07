@@ -5,8 +5,9 @@ const app = express();
 const port = process.env.PORT || 5000
 
 app.use(cors({
-  origin:["https://tour-5a80b4v3k-ejumirs-projects.vercel.app", "http://localhost:5177"]
+  origin:["https://tourist-spot-9a2cb.web.app", "http://localhost:5177", "tourist-spot-9a2cb.firebaseapp.com"]
 }));
+
 app.use(express.json());
 
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
